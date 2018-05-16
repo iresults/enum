@@ -15,7 +15,7 @@ class MixedEnumTest extends \PHPUnit_Framework_TestCase
      */
     public function getValueForNameTest($name, $expected)
     {
-        $this->assertSame($expected, (new MixedEnum($name))->getValue());
+        $this->assertSame($expected, (MixedEnum::instance($name))->getValue());
     }
 
     /**
@@ -43,7 +43,7 @@ class MixedEnumTest extends \PHPUnit_Framework_TestCase
      */
     public function getNameForValueTest($value, $expected)
     {
-        $this->assertSame($expected, (new MixedEnum($value))->getName());
+        $this->assertSame($expected, (MixedEnum::instance($value))->getName());
     }
 
     /**
@@ -67,7 +67,7 @@ class MixedEnumTest extends \PHPUnit_Framework_TestCase
      */
     public function instanceCreationTest($input, $expected)
     {
-        $enum = new MixedEnum($input);
+        $enum = MixedEnum::instance($input);
         $this->assertEquals($expected, $enum->getValue());
     }
 
@@ -98,7 +98,52 @@ class MixedEnumTest extends \PHPUnit_Framework_TestCase
      */
     public function instanceCreationShouldFailTest()
     {
-        new MixedEnum('not in enum');
+        MixedEnum::instance('not in enum');
+    }
+
+    /**
+     * @test
+     * @param $input
+     * @dataProvider normalizeDataProvider
+     */
+    public function instanceComparisonTest($input)
+    {
+        $this->assertEquals(MixedEnum::instance($input), MixedEnum::instance($input));
+        $this->assertSame(MixedEnum::instance($input), MixedEnum::instance($input));
+        $this->assertTrue(MixedEnum::instance($input) == MixedEnum::instance($input));
+        $this->assertTrue(MixedEnum::instance($input) === MixedEnum::instance($input));
+    }
+
+    /**
+     * @test
+     * @param $left
+     * @param $right
+     * @dataProvider instanceComparisonFalseDataProvider
+     */
+    public function instanceComparisonFalseTest($left, $right)
+    {
+        $this->assertNotEquals(MixedEnum::instance($left), MixedEnum::instance($right));
+        $this->assertNotSame(MixedEnum::instance($left), MixedEnum::instance($right));
+        $this->assertTrue(MixedEnum::instance($left) != MixedEnum::instance($right));
+        $this->assertTrue(MixedEnum::instance($left) !== MixedEnum::instance($right));
+    }
+
+    public function instanceComparisonFalseDataProvider()
+    {
+        return [
+            ['COLLECTION', MixedEnum::IS_FALSE],
+            ['collection', MixedEnum::IS_FALSE],
+            [MixedEnum::COLLECTION, MixedEnum::IS_FALSE],
+            ['IS_FALSE', MixedEnum::COLLECTION],
+            ['is_false', MixedEnum::COLLECTION],
+            [MixedEnum::IS_FALSE, MixedEnum::COLLECTION],
+            ['IS_TRUE', MixedEnum::IS_NULL],
+            ['is_true', MixedEnum::IS_NULL],
+            [MixedEnum::IS_TRUE, MixedEnum::IS_NULL],
+            ['IS_NULL', MixedEnum::IS_TRUE],
+            ['is_null', MixedEnum::IS_TRUE],
+            [MixedEnum::IS_NULL, MixedEnum::IS_TRUE],
+        ];
     }
 
     /**
@@ -110,7 +155,7 @@ class MixedEnumTest extends \PHPUnit_Framework_TestCase
     public function isValidValueTest($value, $expected)
     {
         try {
-            new MixedEnum($value);
+            MixedEnum::instance($value);
             $actual = true;
         } catch (EnumException $e) {
             $actual = false;

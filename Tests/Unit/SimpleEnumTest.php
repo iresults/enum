@@ -15,7 +15,7 @@ class SimpleEnumTest extends \PHPUnit_Framework_TestCase
      */
     public function getValueForNameTest($name, $expected)
     {
-        $this->assertSame($expected, (new AnimalEnum($name))->getValue());
+        $this->assertSame($expected, (AnimalEnum::instance($name))->getValue());
     }
 
     /**
@@ -43,7 +43,7 @@ class SimpleEnumTest extends \PHPUnit_Framework_TestCase
      */
     public function getNameForValueTest($value, $expected)
     {
-        $this->assertSame($expected, (new AnimalEnum($value))->getName());
+        $this->assertSame($expected, (AnimalEnum::instance($value))->getName());
     }
 
     /**
@@ -67,8 +67,21 @@ class SimpleEnumTest extends \PHPUnit_Framework_TestCase
      */
     public function instanceCreationTest($input, $expected)
     {
-        $enum = new AnimalEnum($input);
+        $enum = AnimalEnum::instance($input);
         $this->assertEquals($expected, $enum->getValue());
+    }
+
+    /**
+     * @test
+     * @param $input
+     * @dataProvider normalizeDataProvider
+     */
+    public function instanceComparisonTest($input)
+    {
+        $this->assertEquals(AnimalEnum::instance($input), AnimalEnum::instance($input));
+        $this->assertSame(AnimalEnum::instance($input), AnimalEnum::instance($input));
+        $this->assertTrue(AnimalEnum::instance($input) == AnimalEnum::instance($input));
+        $this->assertTrue(AnimalEnum::instance($input) === AnimalEnum::instance($input));
     }
 
     /**
@@ -98,7 +111,39 @@ class SimpleEnumTest extends \PHPUnit_Framework_TestCase
      */
     public function instanceCreationShouldFailTest()
     {
-        new AnimalEnum('not in enum');
+        AnimalEnum::instance('not in enum');
+    }
+
+    /**
+     * @test
+     * @param $left
+     * @param $right
+     * @dataProvider instanceComparisonFalseDataProvider
+     */
+    public function instanceComparisonFalseTest($left, $right)
+    {
+        $this->assertNotEquals(AnimalEnum::instance($left), AnimalEnum::instance($right));
+        $this->assertNotSame(AnimalEnum::instance($left), AnimalEnum::instance($right));
+        $this->assertTrue(AnimalEnum::instance($left) != AnimalEnum::instance($right));
+        $this->assertTrue(AnimalEnum::instance($left) !== AnimalEnum::instance($right));
+    }
+
+    public function instanceComparisonFalseDataProvider()
+    {
+        return [
+            ['BIRD', AnimalEnum::CAT],
+            ['bird', AnimalEnum::CAT],
+            [AnimalEnum::BIRD, AnimalEnum::CAT],
+            ['CAT', AnimalEnum::DOG],
+            ['cat', AnimalEnum::DOG],
+            [AnimalEnum::CAT, AnimalEnum::DOG],
+            ['RODENT', AnimalEnum::BIRD],
+            ['rodent', AnimalEnum::BIRD],
+            [AnimalEnum::RODENT, AnimalEnum::BIRD],
+            ['DOG', AnimalEnum::RODENT],
+            ['dog', AnimalEnum::RODENT],
+            [AnimalEnum::DOG, AnimalEnum::RODENT],
+        ];
     }
 
     /**
@@ -110,7 +155,7 @@ class SimpleEnumTest extends \PHPUnit_Framework_TestCase
     public function isValidValueTest($value, $expected)
     {
         try {
-            new AnimalEnum($value);
+            AnimalEnum::instance($value);
             $actual = true;
         } catch (EnumException $e) {
             $actual = false;

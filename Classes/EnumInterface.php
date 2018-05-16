@@ -8,12 +8,12 @@ use Iresults\Enum\Exception\EnumOutOfRangeException;
 interface EnumInterface
 {
     /**
-     * Enum constructor
+     * Return the instance of the given Enum
      *
      * @param array|bool|float|int|string $value
      * @throws EnumException if the input is of an invalid type or it is neither a constant name nor a value
      */
-    public function __construct($value);
+    public static function instance($value);
 
     /**
      * Return the instance's value
