@@ -11,6 +11,7 @@ interface EnumInterface
      * Return the instance of the given Enum
      *
      * @param array|bool|float|int|string $value
+     * @return static
      * @throws EnumException if the input is of an invalid type or it is neither a constant name nor a value
      */
     public static function instance($value);
