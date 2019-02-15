@@ -14,7 +14,7 @@ abstract class Enum implements EnumInterface
      */
     private $name = '';
 
-    private function __construct($value, $name)
+    protected function __construct($value, $name)
     {
         $this->value = $value;
         $this->name = $name;
