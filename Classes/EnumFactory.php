@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Iresults\Enum;
 
@@ -16,16 +17,15 @@ abstract class EnumFactory
      * @param string                      $className
      * @return EnumInterface
      */
-    public static function makeInstance($valueOrName, $className)
+    public static function makeInstance($valueOrName, string $className): EnumInterface
     {
         if (!static::isValidValueType($valueOrName)) {
             throw new InvalidEnumArgumentException(
                 sprintf('Type of value is not a valid constant type or name: "%s"', $valueOrName)
             );
         }
-        if (!is_string($className) || !(is_a($className, Enum::class, true))) {
-            throw new InvalidEnumArgumentException('Argument "className" must be a valid class name');
-        }
+        InvalidEnumArgumentException::assertValidEnumClass($className);
+
         if (is_string($valueOrName) && static::hasConstant($valueOrName, $className)) {
             $name = $valueOrName;
             $value = static::retrieveValueForName($valueOrName, $className);
@@ -55,7 +55,7 @@ abstract class EnumFactory
      * @param string $className
      * @return bool
      */
-    private static function hasConstant($constantName, $className)
+    private static function hasConstant(string $constantName, string $className): bool
     {
         if (!is_string($constantName)) {
             throw new \InvalidArgumentException('Expected argument "constantName" to be of type string');
@@ -73,18 +73,18 @@ abstract class EnumFactory
      * @param string                      $className
      * @return string|bool Returns the name or FALSE if not found
      */
-    private static function getNameForValueOfClass($constantValue, $className)
+    private static function getNameForValueOfClass($constantValue, string $className)
     {
         if (!static::isValidValueType($constantValue)) {
             return false;
         }
-        try {
-            $reflection = new \ReflectionClass($className);
-        } catch (\ReflectionException $e) {
-            return false;
+
+        static $descriptor = null;
+        if (null === $descriptor) {
+            $descriptor = new EnumDescriptor();
         }
 
-        return array_search($constantValue, $reflection->getConstants(), true);
+        return array_search($constantValue, $descriptor->getValues($className), true);
     }
 
     /**
@@ -117,7 +117,7 @@ abstract class EnumFactory
      * @param string $className
      * @return mixed
      */
-    private static function retrieveValueForName($constantName, $className)
+    private static function retrieveValueForName(string $constantName, string $className)
     {
         return constant($className . '::' . strtoupper($constantName));
     }

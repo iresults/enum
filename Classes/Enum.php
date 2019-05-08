@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Iresults\Enum;
 
@@ -14,13 +15,13 @@ abstract class Enum implements EnumInterface
      */
     private $name = '';
 
-    protected function __construct($value, $name)
+    protected function __construct($value, string $name)
     {
         $this->value = $value;
         $this->name = $name;
     }
 
-    public static function instance($value)
+    public static function instance($value): EnumInterface
     {
         return EnumFactory::makeInstance($value, get_called_class());
     }
@@ -30,7 +31,7 @@ abstract class Enum implements EnumInterface
         return $this->value;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -45,7 +46,7 @@ abstract class Enum implements EnumInterface
      * @return EnumInterface
      * @internal
      */
-    public static function createInstance($value, $name)
+    public static function createInstance($value, string $name): EnumInterface
     {
         return new static($value, $name);
     }
@@ -56,7 +57,7 @@ abstract class Enum implements EnumInterface
      * @param string $constantName
      * @return bool
      */
-    public function hasConstant($constantName)
+    public function hasConstant(string $constantName): bool
     {
         if (!is_string($constantName)) {
             throw new \InvalidArgumentException('Expected argument "constantName" to be of type string');

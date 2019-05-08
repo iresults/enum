@@ -1,11 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace Iresults\Enum\Tests\Unit;
 
 use Iresults\Enum\Exception\EnumException;
 use Iresults\Enum\Tests\Fixture\AnimalEnum;
+use PHPUnit\Framework\TestCase;
 
-class SimpleEnumTest extends \PHPUnit_Framework_TestCase
+class SimpleEnumTest extends TestCase
 {
     /**
      * @test

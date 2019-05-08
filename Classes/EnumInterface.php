@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Iresults\Enum;
 
@@ -14,7 +15,7 @@ interface EnumInterface
      * @return static
      * @throws EnumException if the input is of an invalid type or it is neither a constant name nor a value
      */
-    public static function instance($value);
+    public static function instance($value): EnumInterface;
 
     /**
      * Return the instance's value
@@ -29,5 +30,5 @@ interface EnumInterface
      * @return string
      * @throws EnumOutOfRangeException if the constant doesn't exist
      */
-    public function getName();
+    public function getName(): string;
 }
