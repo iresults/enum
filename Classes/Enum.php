@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Iresults\Enum;
 
+use InvalidArgumentException;
+use Iresults\Enum\Exception\EnumException;
+
 abstract class Enum implements EnumInterface
 {
     /**
@@ -21,6 +24,13 @@ abstract class Enum implements EnumInterface
         $this->name = $name;
     }
 
+    /**
+     * Return the instance of the given Enum
+     *
+     * @param array|bool|float|int|string $value
+     * @return static
+     * @throws EnumException if the input is of an invalid type or it is neither a constant name nor a value
+     */
     public static function instance($value): EnumInterface
     {
         return EnumFactory::makeInstance($value, get_called_class());
@@ -43,7 +53,7 @@ abstract class Enum implements EnumInterface
      *
      * @param array|bool|float|int|string $value
      * @param string                      $name
-     * @return EnumInterface
+     * @return static
      * @internal
      */
     public static function createInstance($value, string $name): EnumInterface
@@ -60,7 +70,7 @@ abstract class Enum implements EnumInterface
     public function hasConstant(string $constantName): bool
     {
         if (!is_string($constantName)) {
-            throw new \InvalidArgumentException('Expected argument "constantName" to be of type string');
+            throw new InvalidArgumentException('Expected argument "constantName" to be of type string');
         }
 
         return defined(get_class($this) . '::' . strtoupper($constantName));
