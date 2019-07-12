@@ -75,4 +75,13 @@ abstract class Enum implements EnumInterface
 
         return defined(get_class($this) . '::' . strtoupper($constantName));
     }
+
+    /**
+     * Enum instances should not be serialized or you MUST NOT relay on object equality
+     *
+     * @deprecated
+     */
+    public function __wakeup()
+    {
+    }
 }

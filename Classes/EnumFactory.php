@@ -3,12 +3,27 @@ declare(strict_types=1);
 
 namespace Iresults\Enum;
 
+use InvalidArgumentException;
 use Iresults\Enum\Exception\EnumOutOfRangeException;
 use Iresults\Enum\Exception\InvalidEnumArgumentException;
+use ReflectionClass;
+use function array_key_exists;
+use function array_search;
+use function call_user_func;
+use function get_class;
+use function gettype;
+use function is_array;
+use function is_null;
+use function is_object;
+use function is_scalar;
+use function is_string;
+use function sprintf;
+use function strtoupper;
 
 abstract class EnumFactory
 {
     private static $registry = [];
+    private static $reflectionCache = [];
 
     /**
      * Return the instance of the enum from the registry or create a new one
@@ -21,14 +36,16 @@ abstract class EnumFactory
     {
         if (!static::isValidValueType($valueOrName)) {
             throw new InvalidEnumArgumentException(
-                sprintf('Type of value is not a valid constant type or name: "%s"', $valueOrName)
+                sprintf(
+                    'Type of value is not a valid constant type or name: "%s"',
+                    is_object($valueOrName) ? get_class($valueOrName) : gettype($valueOrName)
+                )
             );
         }
         InvalidEnumArgumentException::assertValidEnumClass($className);
-
         if (is_string($valueOrName) && static::hasConstant($valueOrName, $className)) {
             $name = $valueOrName;
-            $value = static::retrieveValueForName($valueOrName, $className);
+            $value = null;
         } else {
             $name = static::getNameForValueOfClass($valueOrName, $className);
             $value = $valueOrName;
@@ -36,16 +53,35 @@ abstract class EnumFactory
 
         if (false === $name) {
             throw new EnumOutOfRangeException(
-                'Can not instantiate enum from input, because it is neither a constant name nor a value of this enum'
+                sprintf(
+                    'Can not instantiate enum from input, because it is neither a constant '
+                    . 'name nor a value of this enum. (%s)%s given',
+                    gettype($valueOrName),
+                    is_scalar($valueOrName) ? $valueOrName : ''
+                )
             );
         }
-        $registryKey = $className . '::' . $name;
-
+        $registryKey = $className . '::' . strtoupper($name);
         if (!isset(self::$registry[$registryKey])) {
-            self::$registry[$registryKey] = call_user_func([$className, 'createInstance'], $value, $name);
+            self::$registry[$registryKey] = call_user_func(
+                [$className, 'createInstance'],
+                $value ?? $value = static::retrieveValueForName($name, $className),
+                $name
+            );
         }
 
         return self::$registry[$registryKey];
+    }
+
+
+    private static function getConstants(string $className)
+    {
+        if (!isset(static::$reflectionCache[$className])) {
+            $reflection = new ReflectionClass($className);
+            static::$reflectionCache[$className] = $reflection->getConstants();
+        }
+
+        return static::$reflectionCache[$className];
     }
 
     /**
@@ -58,10 +94,10 @@ abstract class EnumFactory
     private static function hasConstant(string $constantName, string $className): bool
     {
         if (!is_string($constantName)) {
-            throw new \InvalidArgumentException('Expected argument "constantName" to be of type string');
+            throw new InvalidArgumentException('Expected argument "constantName" to be of type string');
         }
 
-        return defined($className . '::' . strtoupper($constantName));
+        return array_key_exists(strtoupper($constantName), static::getConstants($className));
     }
 
     /**
@@ -119,6 +155,6 @@ abstract class EnumFactory
      */
     private static function retrieveValueForName(string $constantName, string $className)
     {
-        return constant($className . '::' . strtoupper($constantName));
+        return static::getConstants($className)[strtoupper($constantName)] ?? null;
     }
 }

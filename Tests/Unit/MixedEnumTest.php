@@ -112,6 +112,7 @@ class MixedEnumTest extends TestCase
     {
         $this->assertEquals(MixedEnum::instance($input), MixedEnum::instance($input));
         $this->assertSame(MixedEnum::instance($input), MixedEnum::instance($input));
+        /** @noinspection PhpNonStrictObjectEqualityInspection */
         $this->assertTrue(MixedEnum::instance($input) == MixedEnum::instance($input));
         $this->assertTrue(MixedEnum::instance($input) === MixedEnum::instance($input));
     }
@@ -126,6 +127,7 @@ class MixedEnumTest extends TestCase
     {
         $this->assertNotEquals(MixedEnum::instance($left), MixedEnum::instance($right));
         $this->assertNotSame(MixedEnum::instance($left), MixedEnum::instance($right));
+        /** @noinspection PhpNonStrictObjectEqualityInspection */
         $this->assertTrue(MixedEnum::instance($left) != MixedEnum::instance($right));
         $this->assertTrue(MixedEnum::instance($left) !== MixedEnum::instance($right));
     }
