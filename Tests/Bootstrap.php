@@ -17,6 +17,8 @@ class Bootstrap
             require_once __DIR__ . '/../vendor/autoload.php';
         } elseif (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
             require_once __DIR__ . '/../../../../vendor/autoload.php';
+        } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+            require_once __DIR__ . '/../../vendor/autoload.php';
         } else {
             throw new \Exception('Could not find composer autoloader');
         }
@@ -26,8 +28,7 @@ class Bootstrap
     {
         spl_autoload_register(
             function ($className) {
-
-                echo $className.PHP_EOL;
+                echo $className . PHP_EOL;
                 $pathRelative = str_replace(
                     ['_', '\\'],
                     DIRECTORY_SEPARATOR,
@@ -40,7 +41,6 @@ class Bootstrap
                 }
             }
         );
-
     }
 }
 

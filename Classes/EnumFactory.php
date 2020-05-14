@@ -23,6 +23,7 @@ use function strtoupper;
 abstract class EnumFactory
 {
     private static $registry = [];
+
     private static $reflectionCache = [];
 
     /**
@@ -43,6 +44,16 @@ abstract class EnumFactory
             );
         }
         InvalidEnumArgumentException::assertValidEnumClass($className);
+
+        if (is_scalar($valueOrName)) {
+            $argumentRegistryKey = 'argkey::' . $className . '::' . gettype($valueOrName) . '::' . $valueOrName;
+            if (isset(self::$registry[$argumentRegistryKey])) {
+                return self::$registry[$argumentRegistryKey];
+            }
+        } else {
+            $argumentRegistryKey = '';
+        }
+
         if (is_string($valueOrName) && static::hasConstant($valueOrName, $className)) {
             $name = $valueOrName;
             $value = null;
@@ -61,18 +72,24 @@ abstract class EnumFactory
                 )
             );
         }
-        $registryKey = $className . '::' . strtoupper($name);
+        $registryKey = 'namekey::' . $className . '::' . strtoupper($name);
         if (!isset(self::$registry[$registryKey])) {
-            self::$registry[$registryKey] = call_user_func(
+            $instance = call_user_func(
                 [$className, 'createInstance'],
                 $value ?? $value = static::retrieveValueForName($name, $className),
                 $name
             );
+
+            self::$registry[$registryKey] = $instance;
+            if ($argumentRegistryKey) {
+                self::$registry[$argumentRegistryKey] = $instance;
+            }
+
+            return $instance;
         }
 
         return self::$registry[$registryKey];
     }
-
 
     private static function getConstants(string $className)
     {
