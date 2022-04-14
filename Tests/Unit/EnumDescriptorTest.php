@@ -16,13 +16,13 @@ class EnumDescriptorTest extends TestCase
      */
     private $fixture;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->fixture = new EnumDescriptor();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->fixture);
         parent::tearDown();

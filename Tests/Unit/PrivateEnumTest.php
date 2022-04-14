@@ -5,6 +5,7 @@ namespace Iresults\Enum\Tests\Unit;
 
 use Iresults\Enum\EnumInterface;
 use Iresults\Enum\Exception\EnumException;
+use Iresults\Enum\Exception\EnumOutOfRangeException;
 use Iresults\Enum\Tests\Fixture\PrivateEnum;
 use PHPUnit\Framework\TestCase;
 
@@ -119,10 +120,10 @@ class PrivateEnumTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Iresults\Enum\Exception\EnumOutOfRangeException
      */
     public function instanceCreationShouldFailTest()
     {
+        $this->expectException(EnumOutOfRangeException::class);
         PrivateEnum::instance('not in enum');
     }
 
