@@ -1,7 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Iresults\Enum\Tests;
+
+use Composer\Autoload\ClassLoader;
+
+use function class_exists;
 
 class Bootstrap
 {
@@ -13,6 +18,11 @@ class Bootstrap
 
     private function registerComposerAutoloader()
     {
+        // If run within composer context
+        if (class_exists(ClassLoader::class, false)) {
+            return;
+        }
+        
         if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
             require_once __DIR__ . '/../vendor/autoload.php';
         } elseif (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
