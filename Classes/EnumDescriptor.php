@@ -11,10 +11,19 @@ use function array_keys;
 
 class EnumDescriptor
 {
-    private $constantsCache = [];
+    /**
+     * @var array<class-string, array<string,mixed>>
+     */
+    private array $constantsCache = [];
 
     /**
      * Return a dictionary of the constant values of the given Enum class
+     *
+     * @template T
+     *
+     * @param class-string<EnumInterface<T>> $className
+     *
+     * @return array<string,mixed>
      */
     public function getValues(string $className): array
     {
@@ -29,6 +38,12 @@ class EnumDescriptor
 
     /**
      * Return an array of the constant names of the given Enum class
+     *
+     * @template T
+     *
+     * @param class-string<EnumInterface<T>> $className
+     *
+     * @return list<string>
      */
     public function getNames(string $className): array
     {

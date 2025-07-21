@@ -4,46 +4,51 @@ declare(strict_types=1);
 
 namespace Iresults\Enum;
 
-use InvalidArgumentException;
 use Iresults\Enum\Exception\EnumException;
 
+/**
+ * @template T of scalar|null|list<scalar>
+ *
+ * @implements EnumInterface<T>
+ */
 abstract class Enum implements EnumInterface
 {
     /**
-     * @var int|float|string|array|bool
+     * @param T $value
      */
-    private $value;
-
-    /**
-     * @var string
-     */
-    private $name = '';
-
-    protected function __construct($value, string $name)
-    {
-        $this->value = $value;
-        $this->name = $name;
+    final protected function __construct(
+        public readonly mixed $value,
+        public readonly string $name,
+    ) {
     }
 
     /**
      * Return the instance of the given Enum
      *
-     * @param array|bool|float|int|string $value
-     *
      * @return static
      *
      * @throws EnumException if the input is of an invalid type or it is neither a constant name nor a value
      */
-    public static function instance($value): EnumInterface
-    {
+    public static function instance(
+        array|bool|float|int|string|null $value,
+    ): EnumInterface {
+        // @phpstan-ignore return.type
         return EnumFactory::makeInstance($value, get_called_class());
     }
 
-    public function getValue()
+    /**
+     * @return T
+     *
+     * @deprecated use value property instead
+     */
+    public function getValue(): mixed
     {
         return $this->value;
     }
 
+    /**
+     * @deprecated use name property instead
+     */
     public function getName(): string
     {
         return $this->name;
@@ -54,26 +59,24 @@ abstract class Enum implements EnumInterface
      *
      * This method is only meant to be called from the Enum Factory
      *
-     * @param array|bool|float|int|string $value
+     * @param mixed[]|bool|float|int|string|null $value
      *
-     * @return static
+     * @return EnumInterface<T>
      *
      * @internal
      */
-    public static function createInstance($value, string $name): EnumInterface
-    {
+    public static function createInstance(
+        array|bool|float|int|string|null $value,
+        string $name,
+    ): EnumInterface {
         return new static($value, $name);
     }
 
     /**
-     * Returns the if a constant with the given name exists
+     * Return the if a constant with the given name exists
      */
     public function hasConstant(string $constantName): bool
     {
-        if (!is_string($constantName)) {
-            throw new InvalidArgumentException('Expected argument "constantName" to be of type string');
-        }
-
         return defined(get_class($this) . '::' . strtoupper($constantName));
     }
 
@@ -82,7 +85,7 @@ abstract class Enum implements EnumInterface
      *
      * @deprecated
      */
-    public function __wakeup()
+    public function __wakeup(): void
     {
     }
 }

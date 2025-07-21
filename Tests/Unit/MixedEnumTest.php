@@ -16,7 +16,7 @@ class MixedEnumTest extends TestCase
      *
      * @dataProvider getValueForNameDataProvider
      */
-    public function getValueForNameTest($name, $expected)
+    public function getValueForNameTest($name, $expected): void
     {
         $this->assertSame($expected, (MixedEnum::instance($name))->getValue());
     }
@@ -43,7 +43,7 @@ class MixedEnumTest extends TestCase
      *
      * @dataProvider getNameForValueDataProvider
      */
-    public function getNameForValueTest($value, $expected)
+    public function getNameForValueTest($value, $expected): void
     {
         $this->assertSame($expected, (MixedEnum::instance($value))->getName());
     }
@@ -66,7 +66,7 @@ class MixedEnumTest extends TestCase
      *
      * @dataProvider normalizeDataProvider
      */
-    public function instanceCreationTest($input, $expected)
+    public function instanceCreationTest($input, $expected): void
     {
         $enum = MixedEnum::instance($input);
         $this->assertEquals($expected, $enum->getValue());
@@ -75,7 +75,7 @@ class MixedEnumTest extends TestCase
     /**
      * @return list<array{0:mixed, 1:mixed}>
      */
-    public function normalizeDataProvider()
+    public function normalizeDataProvider(): array
     {
         return [
             ['COLLECTION', MixedEnum::COLLECTION],
@@ -96,7 +96,7 @@ class MixedEnumTest extends TestCase
     /**
      * @test
      */
-    public function instanceCreationShouldFailTest()
+    public function instanceCreationShouldFailTest(): void
     {
         $this->expectException(EnumOutOfRangeException::class);
         MixedEnum::instance('not in enum');
@@ -107,7 +107,7 @@ class MixedEnumTest extends TestCase
      *
      * @dataProvider normalizeDataProvider
      */
-    public function instanceComparisonTest($input)
+    public function instanceComparisonTest($input): void
     {
         $this->assertEquals(MixedEnum::instance($input), MixedEnum::instance($input));
         $this->assertSame(MixedEnum::instance($input), MixedEnum::instance($input));
@@ -121,7 +121,7 @@ class MixedEnumTest extends TestCase
      *
      * @dataProvider instanceComparisonFalseDataProvider
      */
-    public function instanceComparisonFalseTest($left, $right)
+    public function instanceComparisonFalseTest($left, $right): void
     {
         $this->assertNotEquals(MixedEnum::instance($left), MixedEnum::instance($right));
         $this->assertNotSame(MixedEnum::instance($left), MixedEnum::instance($right));
@@ -156,7 +156,7 @@ class MixedEnumTest extends TestCase
      *
      * @dataProvider isValidValueDataProvider
      */
-    public function isValidValueTest($value, $expected)
+    public function isValidValueTest($value, $expected): void
     {
         try {
             MixedEnum::instance($value);
@@ -170,7 +170,7 @@ class MixedEnumTest extends TestCase
     /**
      * @return list<array{0:mixed, 1:mixed}>
      */
-    public function isValidValueDataProvider()
+    public function isValidValueDataProvider(): array
     {
         return [
             [MixedEnum::COLLECTION, true],

@@ -11,7 +11,10 @@ use function is_a;
 
 class InvalidEnumArgumentException extends EnumException
 {
-    public static function assertValidEnumClass(string $className)
+    /**
+     * @param class-string $className
+     */
+    public static function assertValidEnumClass(string $className): void
     {
         if (!class_exists($className) || !(is_a($className, EnumInterface::class, true))) {
             throw new InvalidEnumArgumentException('Argument must be a valid Enum implementation class name');
