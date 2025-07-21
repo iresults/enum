@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Iresults\Enum\Tests\Unit;
@@ -30,8 +31,6 @@ class EnumDescriptorTest extends TestCase
 
     /**
      * @dataProvider getValuesDataProvider
-     * @param string $class
-     * @param array  $expected
      */
     public function testGetValues(string $class, array $expected)
     {
@@ -41,6 +40,9 @@ class EnumDescriptorTest extends TestCase
         );
     }
 
+    /**
+     * @return list<array{0:class-string, 1:array<string,mixed>}>
+     */
     public function getValuesDataProvider()
     {
         return [
@@ -71,8 +73,6 @@ class EnumDescriptorTest extends TestCase
 
     /**
      * @dataProvider getNamesDataProvider
-     * @param string $class
-     * @param array  $expected
      */
     public function testGetNames(string $class, array $expected)
     {
@@ -82,6 +82,9 @@ class EnumDescriptorTest extends TestCase
         );
     }
 
+    /**
+     * @return list<array{0:class-string, 1:list<string>}>
+     */
     public function getNamesDataProvider()
     {
         return [

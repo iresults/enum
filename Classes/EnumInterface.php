@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Iresults\Enum;
@@ -12,7 +13,9 @@ interface EnumInterface
      * Return the instance of the given Enum
      *
      * @param array|bool|float|int|string $value
+     *
      * @return static
+     *
      * @throws EnumException if the input is of an invalid type or it is neither a constant name nor a value
      */
     public static function instance($value): EnumInterface;
@@ -27,7 +30,6 @@ interface EnumInterface
     /**
      * Return name associated with the instance's value
      *
-     * @return string
      * @throws EnumOutOfRangeException if the constant doesn't exist
      */
     public function getName(): string;

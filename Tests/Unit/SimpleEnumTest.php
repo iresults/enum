@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Iresults\Enum\Tests\Unit;
@@ -12,19 +13,18 @@ class SimpleEnumTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider getValueForNameDataProvider
-     * @param $name
-     * @param $expected
      */
-    public function getValueForNameTest($name, $expected)
+    public function getValueForNameTest(string $name, int $expected): void
     {
         $this->assertSame($expected, (AnimalEnum::instance($name))->getValue());
     }
 
     /**
-     * @return array
+     * @return list<array{0:string,1:int}>
      */
-    public function getValueForNameDataProvider()
+    public static function getValueForNameDataProvider()
     {
         return [
             ['CAT', AnimalEnum::CAT],
@@ -40,19 +40,20 @@ class SimpleEnumTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider getNameForValueDataProvider
-     * @param $value
-     * @param $expected
+     *
+     * @return void
      */
-    public function getNameForValueTest($value, $expected)
+    public function getNameForValueTest(int $value, string $expected)
     {
         $this->assertSame($expected, (AnimalEnum::instance($value))->getName());
     }
 
     /**
-     * @return array
+     * @return list<array{0:int,1:string}>
      */
-    public function getNameForValueDataProvider()
+    public static function getNameForValueDataProvider()
     {
         return [
             [AnimalEnum::CAT, 'CAT'],
@@ -64,9 +65,10 @@ class SimpleEnumTest extends TestCase
 
     /**
      * @test
-     * @param $input
-     * @param $expected
+     *
      * @dataProvider normalizeDataProvider
+     *
+     * @return void
      */
     public function instanceCreationTest($input, $expected)
     {
@@ -76,8 +78,10 @@ class SimpleEnumTest extends TestCase
 
     /**
      * @test
-     * @param $input
+     *
      * @dataProvider normalizeDataProvider
+     *
+     * @return void
      */
     public function instanceComparisonTest($input)
     {
@@ -110,6 +114,8 @@ class SimpleEnumTest extends TestCase
 
     /**
      * @test
+     *
+     * @return void
      */
     public function instanceCreationShouldFailTest()
     {
@@ -119,9 +125,10 @@ class SimpleEnumTest extends TestCase
 
     /**
      * @test
-     * @param $left
-     * @param $right
+     *
      * @dataProvider instanceComparisonFalseDataProvider
+     *
+     * @return void
      */
     public function instanceComparisonFalseTest($left, $right)
     {
@@ -131,6 +138,9 @@ class SimpleEnumTest extends TestCase
         $this->assertTrue(AnimalEnum::instance($left) !== AnimalEnum::instance($right));
     }
 
+    /**
+     * @return array<int,mixed>
+     */
     public function instanceComparisonFalseDataProvider()
     {
         return [
@@ -151,9 +161,10 @@ class SimpleEnumTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider isValidValueDataProvider
-     * @param $value
-     * @param $expected
+     *
+     * @return void
      */
     public function isValidValueTest($value, $expected)
     {

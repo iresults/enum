@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Iresults\Enum;
 
 use Iresults\Enum\Exception\InvalidEnumArgumentException;
 use ReflectionClass;
+
 use function array_keys;
 
 class EnumDescriptor
@@ -13,9 +15,6 @@ class EnumDescriptor
 
     /**
      * Return a dictionary of the constant values of the given Enum class
-     *
-     * @param string $className
-     * @return array
      */
     public function getValues(string $className): array
     {
@@ -30,9 +29,6 @@ class EnumDescriptor
 
     /**
      * Return an array of the constant names of the given Enum class
-     *
-     * @param string $className
-     * @return array
      */
     public function getNames(string $className): array
     {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Iresults\Enum\Tests\Unit;
@@ -13,6 +14,8 @@ class PrivateEnumTest extends TestCase
 {
     /**
      * @test
+     *
+     * @return void
      */
     public function instanceAreTheSameTest()
     {
@@ -35,9 +38,12 @@ class PrivateEnumTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider instanceDataProvider
-     * @param               $name
+     *
      * @param EnumInterface $expected
+     *
+     * @return void
      */
     public function instanceTest($name, $expected)
     {
@@ -45,9 +51,9 @@ class PrivateEnumTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string, array{0:string, 1:PrivateEnum}>
      */
-    public function instanceDataProvider()
+    public static function instanceDataProvider()
     {
         return [
             'COLLECTION' => ['COLLECTION', PrivateEnum::collection()],
@@ -63,9 +69,10 @@ class PrivateEnumTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider getNameForValueDataProvider
-     * @param $value
-     * @param $expected
+     *
+     * @return void
      */
     public function getNameForValueTest($value, $expected)
     {
@@ -73,9 +80,9 @@ class PrivateEnumTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:mixed, 1:string}>
      */
-    public function getNameForValueDataProvider()
+    public static function getNameForValueDataProvider()
     {
         return [
             [[1, 2, 3], 'COLLECTION'],
@@ -87,9 +94,10 @@ class PrivateEnumTest extends TestCase
 
     /**
      * @test
-     * @param $input
-     * @param $expected
+     *
      * @dataProvider normalizeDataProvider
+     *
+     * @return void
      */
     public function instanceCreationTest($input, $expected)
     {
@@ -98,9 +106,9 @@ class PrivateEnumTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:mixed, 1:PrivateEnum}>
      */
-    public function normalizeDataProvider()
+    public static function normalizeDataProvider()
     {
         return [
             ['COLLECTION', PrivateEnum::collection()],
@@ -120,6 +128,8 @@ class PrivateEnumTest extends TestCase
 
     /**
      * @test
+     *
+     * @return void
      */
     public function instanceCreationShouldFailTest()
     {
@@ -129,33 +139,39 @@ class PrivateEnumTest extends TestCase
 
     /**
      * @test
-     * @param $input
+     *
      * @dataProvider normalizeDataProvider
+     *
+     * @return void
      */
     public function instanceComparisonTest($input)
     {
         $this->assertEquals(PrivateEnum::instance($input), PrivateEnum::instance($input));
         $this->assertSame(PrivateEnum::instance($input), PrivateEnum::instance($input));
-        /** @noinspection PhpNonStrictObjectEqualityInspection */
+        /* @noinspection PhpNonStrictObjectEqualityInspection */
         $this->assertTrue(PrivateEnum::instance($input) == PrivateEnum::instance($input));
         $this->assertTrue(PrivateEnum::instance($input) === PrivateEnum::instance($input));
     }
 
     /**
      * @test
-     * @param $left
-     * @param $right
+     *
      * @dataProvider instanceComparisonFalseDataProvider
+     *
+     * @return void
      */
     public function instanceComparisonFalseTest($left, $right)
     {
         $this->assertNotEquals(PrivateEnum::instance($left), PrivateEnum::instance($right));
         $this->assertNotSame(PrivateEnum::instance($left), PrivateEnum::instance($right));
-        /** @noinspection PhpNonStrictObjectEqualityInspection */
+        /* @noinspection PhpNonStrictObjectEqualityInspection */
         $this->assertTrue(PrivateEnum::instance($left) != PrivateEnum::instance($right));
         $this->assertTrue(PrivateEnum::instance($left) !== PrivateEnum::instance($right));
     }
 
+    /**
+     * @return list<array{0:mixed, 1:mixed}>
+     */
     public function instanceComparisonFalseDataProvider()
     {
         return [
@@ -176,9 +192,10 @@ class PrivateEnumTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider isValidValueDataProvider
-     * @param $value
-     * @param $expected
+     *
+     * @return void
      */
     public function isValidValueTest($value, $expected)
     {
@@ -192,9 +209,9 @@ class PrivateEnumTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:mixed, 1:bool}>
      */
-    public function isValidValueDataProvider()
+    public static function isValidValueDataProvider()
     {
         return [
             [[1, 2, 3], true],

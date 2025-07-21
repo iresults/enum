@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Iresults\Enum;
@@ -28,7 +29,9 @@ abstract class Enum implements EnumInterface
      * Return the instance of the given Enum
      *
      * @param array|bool|float|int|string $value
+     *
      * @return static
+     *
      * @throws EnumException if the input is of an invalid type or it is neither a constant name nor a value
      */
     public static function instance($value): EnumInterface
@@ -52,8 +55,9 @@ abstract class Enum implements EnumInterface
      * This method is only meant to be called from the Enum Factory
      *
      * @param array|bool|float|int|string $value
-     * @param string                      $name
+     *
      * @return static
+     *
      * @internal
      */
     public static function createInstance($value, string $name): EnumInterface
@@ -63,9 +67,6 @@ abstract class Enum implements EnumInterface
 
     /**
      * Returns the if a constant with the given name exists
-     *
-     * @param string $constantName
-     * @return bool
      */
     public function hasConstant(string $constantName): bool
     {

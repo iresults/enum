@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Iresults\Enum;
@@ -7,6 +8,7 @@ use InvalidArgumentException;
 use Iresults\Enum\Exception\EnumOutOfRangeException;
 use Iresults\Enum\Exception\InvalidEnumArgumentException;
 use ReflectionClass;
+
 use function array_key_exists;
 use function array_search;
 use function call_user_func;
@@ -30,18 +32,11 @@ abstract class EnumFactory
      * Return the instance of the enum from the registry or create a new one
      *
      * @param array|bool|float|int|string $valueOrName
-     * @param string                      $className
-     * @return EnumInterface
      */
     public static function makeInstance($valueOrName, string $className): EnumInterface
     {
         if (!static::isValidValueType($valueOrName)) {
-            throw new InvalidEnumArgumentException(
-                sprintf(
-                    'Type of value is not a valid constant type or name: "%s"',
-                    is_object($valueOrName) ? get_class($valueOrName) : gettype($valueOrName)
-                )
-            );
+            throw new InvalidEnumArgumentException(sprintf('Type of value is not a valid constant type or name: "%s"', is_object($valueOrName) ? get_class($valueOrName) : gettype($valueOrName)));
         }
         InvalidEnumArgumentException::assertValidEnumClass($className);
 
@@ -63,14 +58,7 @@ abstract class EnumFactory
         }
 
         if (false === $name) {
-            throw new EnumOutOfRangeException(
-                sprintf(
-                    'Can not instantiate enum from input, because it is neither a constant '
-                    . 'name nor a value of this enum. (%s)%s given',
-                    gettype($valueOrName),
-                    is_scalar($valueOrName) ? $valueOrName : ''
-                )
-            );
+            throw new EnumOutOfRangeException(sprintf('Can not instantiate enum from input, because it is neither a constant name nor a value of this enum. (%s)%s given', gettype($valueOrName), is_scalar($valueOrName) ? $valueOrName : ''));
         }
         $registryKey = 'namekey::' . $className . '::' . strtoupper($name);
         if (!isset(self::$registry[$registryKey])) {
@@ -103,10 +91,6 @@ abstract class EnumFactory
 
     /**
      * Returns the if a constant with the given name exists
-     *
-     * @param string $constantName
-     * @param string $className
-     * @return bool
      */
     private static function hasConstant(string $constantName, string $className): bool
     {
@@ -123,7 +107,7 @@ abstract class EnumFactory
      * If the enum contains multiple constants with the given value the behaviour is undefined
      *
      * @param int|float|string|array|bool $constantValue
-     * @param string                      $className
+     *
      * @return string|bool Returns the name or FALSE if not found
      */
     private static function getNameForValueOfClass($constantValue, string $className)
@@ -143,7 +127,6 @@ abstract class EnumFactory
     /**
      * Returns if the given value is a valid type for an enum in general
      *
-     * @param mixed $value
      * @return bool
      */
     private static function isValidValueType($value)
@@ -165,11 +148,6 @@ abstract class EnumFactory
         return false;
     }
 
-    /**
-     * @param string $constantName
-     * @param string $className
-     * @return mixed
-     */
     private static function retrieveValueForName(string $constantName, string $className)
     {
         return static::getConstants($className)[strtoupper($constantName)] ?? null;

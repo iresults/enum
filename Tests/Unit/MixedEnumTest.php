@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Iresults\Enum\Tests\Unit;
@@ -12,9 +13,8 @@ class MixedEnumTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider getValueForNameDataProvider
-     * @param $name
-     * @param $expected
      */
     public function getValueForNameTest($name, $expected)
     {
@@ -22,9 +22,9 @@ class MixedEnumTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:string, 1:mixed}>
      */
-    public function getValueForNameDataProvider()
+    public static function getValueForNameDataProvider()
     {
         return [
             ['COLLECTION', MixedEnum::COLLECTION],
@@ -40,9 +40,8 @@ class MixedEnumTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider getNameForValueDataProvider
-     * @param $value
-     * @param $expected
      */
     public function getNameForValueTest($value, $expected)
     {
@@ -50,7 +49,7 @@ class MixedEnumTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:mixed, 1:string}>
      */
     public function getNameForValueDataProvider()
     {
@@ -64,8 +63,7 @@ class MixedEnumTest extends TestCase
 
     /**
      * @test
-     * @param $input
-     * @param $expected
+     *
      * @dataProvider normalizeDataProvider
      */
     public function instanceCreationTest($input, $expected)
@@ -75,7 +73,7 @@ class MixedEnumTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:mixed, 1:mixed}>
      */
     public function normalizeDataProvider()
     {
@@ -106,33 +104,35 @@ class MixedEnumTest extends TestCase
 
     /**
      * @test
-     * @param $input
+     *
      * @dataProvider normalizeDataProvider
      */
     public function instanceComparisonTest($input)
     {
         $this->assertEquals(MixedEnum::instance($input), MixedEnum::instance($input));
         $this->assertSame(MixedEnum::instance($input), MixedEnum::instance($input));
-        /** @noinspection PhpNonStrictObjectEqualityInspection */
+        /* @noinspection PhpNonStrictObjectEqualityInspection */
         $this->assertTrue(MixedEnum::instance($input) == MixedEnum::instance($input));
         $this->assertTrue(MixedEnum::instance($input) === MixedEnum::instance($input));
     }
 
     /**
      * @test
-     * @param $left
-     * @param $right
+     *
      * @dataProvider instanceComparisonFalseDataProvider
      */
     public function instanceComparisonFalseTest($left, $right)
     {
         $this->assertNotEquals(MixedEnum::instance($left), MixedEnum::instance($right));
         $this->assertNotSame(MixedEnum::instance($left), MixedEnum::instance($right));
-        /** @noinspection PhpNonStrictObjectEqualityInspection */
+        /* @noinspection PhpNonStrictObjectEqualityInspection */
         $this->assertTrue(MixedEnum::instance($left) != MixedEnum::instance($right));
         $this->assertTrue(MixedEnum::instance($left) !== MixedEnum::instance($right));
     }
 
+    /**
+     * @return list<array{0:mixed, 1:mixed}>
+     */
     public function instanceComparisonFalseDataProvider()
     {
         return [
@@ -153,9 +153,8 @@ class MixedEnumTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider isValidValueDataProvider
-     * @param $value
-     * @param $expected
      */
     public function isValidValueTest($value, $expected)
     {
@@ -169,7 +168,7 @@ class MixedEnumTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:mixed, 1:mixed}>
      */
     public function isValidValueDataProvider()
     {
