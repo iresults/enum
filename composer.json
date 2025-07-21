@@ -4,7 +4,7 @@
     "description": "Enum base class",
     "license": "MIT",
     "require": {
-        "php": "^7.1 || ~8.0.0 || ~8.1.0|| ~8.2.0"
+        "php": "^7.1 || ^8.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
